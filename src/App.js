@@ -1,6 +1,7 @@
 import React from 'react'
 import * as BooksAPI from './BooksAPI'
 import BookShelf from './BookShelf'
+import Book from './Book'
 import './App.css'
 
 class BooksApp extends React.Component {
@@ -12,13 +13,20 @@ class BooksApp extends React.Component {
      * pages, as well as provide a good URL they can bookmark and share.
      */
     showSearchPage: false,
-    books: []
+    books: [],
+    bookSearch: []
   }
 
   componentDidMount() {
     BooksAPI.getAll().then((book) => this.setState({
       books: book
     }));
+  }
+
+  queryBooks = (query) => {
+    BooksAPI.search(query).then((book) => this.setState({
+      bookSearch: book
+    }))
   }
 
   render() {
@@ -37,12 +45,19 @@ class BooksApp extends React.Component {
                   However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
                   you don't find a specific author or title. Every search is limited by search terms.
                 */}
-                <input type="text" placeholder="Search by title or author"/>
+                <input type="text" placeholder="Search by title or author" onChange={(event) => this.queryBooks(event.target.value)}/>
 
               </div>
             </div>
             <div className="search-books-results">
-              <ol className="books-grid"></ol>
+              <ol className="books-grid">
+                {console.log(typeof this.state.bookSearch)}
+                {this.state.bookSearch && this.state.bookSearch.length > 0 && this.state.bookSearch.map(book =>
+                  <li>
+                      <Book book={book}/>
+                  </li>
+                ) }
+              </ol>
             </div>
           </div>
         ) : (
@@ -52,13 +67,13 @@ class BooksApp extends React.Component {
             </div>
             <div className="list-books-content">
               <div>
-                <BookShelf shelf="currentlyReading" bookshelfName="Currently Reading" books={this.state.books.filter(b => {
+                <BookShelf bookshelfName="Currently Reading" books={this.state.books.filter(b => {
                   return b.shelf === "currentlyReading"
                 })} />
-                <BookShelf shelf="wantToRead" bookshelfName="Want to Read" books={this.state.books.filter(b => {
+                <BookShelf bookshelfName="Want to Read" books={this.state.books.filter(b => {
                   return b.shelf === "wantToRead"
                 })} />
-                <BookShelf shelf="read" bookshelfName="Read" books={this.state.books.filter(b => {
+                <BookShelf bookshelfName="Read" books={this.state.books.filter(b => {
                   return b.shelf === "read"
                 })} />
               </div>

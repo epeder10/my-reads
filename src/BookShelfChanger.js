@@ -2,27 +2,19 @@ import React from 'react'
 import * as BooksAPI from './BooksAPI'
 
 class BookShelfChanger extends React.Component {
-    addToCurrentlyReading() {
-        BooksAPI.update(this.props.book.id, "currentlyReading")
-    }
-
-    addWantToRead() {
-        BooksAPI.update(this.props.book.id, "wantToRead")
-    }
-
-    addToRead() {
-        BooksAPI.update(this.props.book.id, "read")
+    updateBook = (book, shelf) => {
+        BooksAPI.update(book, shelf)
     }
     
     render() {
         return(
             <div className="book-shelf-changer">
-                <select value={this.props.shelf}>
+                <select value={this.props.book.shelf}>
                 <option value="move" disabled>Move to...</option>
-                <option value="currentlyReading" onClick={this.addToCurrentlyReading} >Currently Reading</option>
-                <option value="wantToRead" onClick={this.addWantToRead} >Want to Read</option>
-                <option value="read" onClick={this.addToRead} >Read</option>
-                <option value="none">None</option>
+                <option value="currentlyReading" onClick={() => this.updateBook(this.props.book, "currentlyReading")} >Currently Reading</option>
+                <option value="wantToRead" onClick={() => this.updateBook(this.props.book, "wantToRead")} >Want to Read</option>
+                <option value="read" onClick={() => this.updateBook(this.props.book, "read")} >Read</option>
+                <option value="none" onClick={() => this.updateBook(this.props.book, "none")} selected>None</option>
                 </select>
             </div>
         )
