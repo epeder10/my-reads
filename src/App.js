@@ -52,13 +52,13 @@ class BooksApp extends React.Component {
             </div>
             <div className="list-books-content">
               <div>
-                <BookShelf bookshelfName="Currently Reading" books={this.state.books.filter(b => {
+                <BookShelf shelf="currentlyReading" bookshelfName="Currently Reading" books={this.state.books.filter(b => {
                   return b.shelf === "currentlyReading"
                 })} />
-                <BookShelf bookshelfName="Want to Read" books={this.state.books.filter(b => {
+                <BookShelf shelf="wantToRead" bookshelfName="Want to Read" books={this.state.books.filter(b => {
                   return b.shelf === "wantToRead"
                 })} />
-                <BookShelf bookshelfName="Read" books={this.state.books.filter(b => {
+                <BookShelf shelf="read" bookshelfName="Read" books={this.state.books.filter(b => {
                   return b.shelf === "read"
                 })} />
               </div>
