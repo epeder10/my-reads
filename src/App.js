@@ -26,8 +26,30 @@ class BooksApp extends React.Component {
   queryBooks = (query) => {
     BooksAPI.search(query).then((book) => this.setState({
       bookSearch: book
-    }))
+    }))}
+
+  isBookOnShelf = (inBook) => {
+    let book = this.state.books.filter(book => book.id === inBook.id)
+    if (book.length === 0) {
+      return "none"
+    } else {
+      return book[0].shelf
+    }
   }
+
+  updateBook = (book, newShelf) => {
+    let tmpBooks = this.state.books
+    let index = tmpBooks.indexOf(book)
+    if (index >= 0) {
+      tmpBooks[index].shelf = newShelf
+    }else {
+      book.shelf = newShelf
+      tmpBooks.push(book)
+    }
+    
+    this.setState((currentState) => ({
+      books: tmpBooks
+  }))}
 
   render() {
     return (
@@ -51,10 +73,9 @@ class BooksApp extends React.Component {
             </div>
             <div className="search-books-results">
               <ol className="books-grid">
-                {console.log(typeof this.state.bookSearch)}
                 {this.state.bookSearch && this.state.bookSearch.length > 0 && this.state.bookSearch.map(book =>
                   <li>
-                      <Book book={book}/>
+                      <Book onUpdateBook={this.updateBook} isBookOnShelf={this.isBookOnShelf} book={book}/>
                   </li>
                 ) }
               </ol>
@@ -67,13 +88,13 @@ class BooksApp extends React.Component {
             </div>
             <div className="list-books-content">
               <div>
-                <BookShelf bookshelfName="Currently Reading" books={this.state.books.filter(b => {
+                <BookShelf onUpdateBook= {this.updateBook} isBookOnShelf={this.isBookOnShelf} bookshelfName="Currently Reading" books={this.state.books.filter(b => {
                   return b.shelf === "currentlyReading"
                 })} />
-                <BookShelf bookshelfName="Want to Read" books={this.state.books.filter(b => {
+                <BookShelf onUpdateBook= {this.updateBook} isBookOnShelf={this.isBookOnShelf} bookshelfName="Want to Read" books={this.state.books.filter(b => {
                   return b.shelf === "wantToRead"
                 })} />
-                <BookShelf bookshelfName="Read" books={this.state.books.filter(b => {
+                <BookShelf onUpdateBook= {this.updateBook} isBookOnShelf={this.isBookOnShelf} bookshelfName="Read" books={this.state.books.filter(b => {
                   return b.shelf === "read"
                 })} />
               </div>
