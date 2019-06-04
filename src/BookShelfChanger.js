@@ -1,10 +1,8 @@
 import React from 'react'
-import * as BooksAPI from './BooksAPI'
 
 class BookShelfChanger extends React.Component {
     updateBook = (book, shelf) => { 
         this.props.onUpdateBook(book, shelf) 
-        BooksAPI.update(book, shelf)
     }
     
     render() {
