@@ -1,0 +1,7 @@
+runtime: nodejs14
+service: my-reads
+
+handlers:
+- url: .*
+  static_files: index.html
+  upload: index.html
